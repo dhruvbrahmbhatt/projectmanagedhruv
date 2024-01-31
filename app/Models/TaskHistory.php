@@ -10,6 +10,7 @@ class TaskHistory extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tasks_id',
         'user_id',
         'status'
     ];

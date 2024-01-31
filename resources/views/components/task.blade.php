@@ -43,11 +43,19 @@ $taskhistory])
         {{ $history->status }} :
         {{ $history->user ? $history->user->name : "Created" }} :
         {{ $history->created_at->format('d/m/y g:i A') }}<br />
-        @endforeach
+        @auth @can('editTask', $task) @if($history->status === "Unassigned")
+        <x-assign-to-popup
+            :developers="$developers"
+            :task="$task"
+            btn="Assign"
+        />
+        @else
+        <x-assign-to-popup
+            :developers="$developers"
+            :task="$task"
+            btn="Transfer"
+        />
+        @endif @endcan @endauth @endforeach
     </p>
-    @endif @auth @can('editTask', $task) @if($history->status === "Unassigned")
-    <x-assign-to-popup :developers="$developers" :task="$task" btn="Assign" />
-    @else
-    <x-assign-to-popup :developers="$developers" :task="$task" btn="Transfer" />
-    @endif @endcan @endauth
+    @endif
 </div>

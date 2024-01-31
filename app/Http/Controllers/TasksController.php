@@ -27,7 +27,7 @@ class TasksController extends Controller
             'task_history' => $taskHistory,
         ]);
     }
-    public function store(Request $request)
+    public function store(Request $request, Tasks $task)
     {
         $this->validate($request, [
             "task" => "required",
@@ -37,6 +37,20 @@ class TasksController extends Controller
             'task' => $request->task,
             'developer_id' => 2
         ]);
+        $task_id = Tasks::latest()->first()->id;
+        $user_id = null;
+        $status = 'Unassigned';
+        if ($request->assign_to) {
+            $user_id = $request->assign_to;
+            $status = 'Assigned';
+        }
+
+        TaskHistory::create([
+            'tasks_id' => $task_id,
+            'user_id' => $user_id,
+            'status' => $status,
+        ]);
+
         return back();
     }
 

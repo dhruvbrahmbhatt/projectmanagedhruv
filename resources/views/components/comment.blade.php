@@ -26,7 +26,6 @@
 {{-- COMMENT FORM --}}
 @auth
 <form
-    id="commentForm"
     action="{{ route('tasks.comment', $task) }}"
     method="post"
     enctype="multipart/form-data"
@@ -43,7 +42,12 @@
             placeholder="status on task"
         ></textarea>
         <!-- Icon to trigger image upload -->
-        <span id="uploadIcon" class="upload-icon">&#x1F4F7;</span>
+        <span
+            id="uploadIcon"
+            class="upload-icon"
+            onclick="$('#imageInput').click()"
+            >&#x1F4F7;</span
+        >
         <!-- Hidden file input for image upload -->
         <input
             type="file"
@@ -60,7 +64,6 @@
         <button
             type="submit"
             class="bg-blue-500 text-white font-medium p-3 text-sm mb-4 rounded-lg items-end"
-            id="submitComment"
         >
             Comment
         </button>
@@ -68,59 +71,5 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!-- Add this script at the end of your Blade view file or in a separate JavaScript file -->
-<script>
-    $(document).ready(function () {
-        // Get the form and input elements
-        var commentForm = $("#commentForm");
-        var uploadIcon = $("#uploadIcon");
-        var imageInput = $("#imageInput");
-        var submitButton = $("#submitComment");
-
-        // Add click event listener to the icon
-        uploadIcon.click(function () {
-            // Trigger the click event on the hidden file input
-            imageInput.click();
-        });
-
-        // Handle file input change event
-        imageInput.change(function () {
-            // You can add additional logic here if needed
-            console.log("File selected:", imageInput[0].files[0].name);
-        });
-
-        // Handle form submission
-        submitButton.click(function () {
-            // Disable the submit button or perform any other actions before AJAX
-            submitButton.prop("disabled", true);
-
-            // Create a FormData object to send both comment and image
-            var formData = new FormData(commentForm[0]);
-            formData.append("_token", "{{ csrf_token() }}");
-
-            // Perform AJAX request to handle image upload
-            $.ajax({
-                url: '{{ route("tasks.comment", $task) }}',
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    // Handle the response as needed (e.g., update form fields)
-                    // console.log(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error("Error uploading image:", error);
-                },
-                complete: function () {
-                    // Enable the submit button or perform any other post-AJAX actions
-                    submitButton.prop("disabled", false);
-                },
-            });
-        });
-    });
-</script>
 
 @endauth
