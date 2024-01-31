@@ -12,16 +12,26 @@ class CommentController extends Controller
     {
         $this->validate($request, [
             "comments.*" => "required",
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'comments.*.required' => 'The field for comment is required.',
         ]);
         foreach ($request->comments as $comment) {
+            if ($request->image) {
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('uploads'), $imageName);
+                $attachment = 'uploads/' . $imageName;
+            } else {
+                $attachment = null;
+            }
+
             $tasks->comments()->create([
                 'user_id' => $request->user()->id,
                 'comment' => $comment,
+                'attachment' => $attachment,
             ]);
         }
-        return back();
+        return back()->with('success', 'Comment Added Successfully');
     }
 
     public function destroy(Comment $comment, Request $request)

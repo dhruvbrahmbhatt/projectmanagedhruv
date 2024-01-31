@@ -11,6 +11,7 @@ class Tasks extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'task',
         'developer_id'
     ];
@@ -22,9 +23,10 @@ class Tasks extends Model
 
     public function tasks()
     {
-        return Tasks::doesnthave('history', 'or', function ($query) {
-            $query->where('status', 'Done');
-        })->latest()->paginate(20);
+        // return Tasks::doesnthave('history', 'or', function ($query) {
+        //     $query->where('status', 'Done');
+        // })->latest()->paginate(20);
+        return Tasks::latest()->paginate(20);
     }
 
     public function comments()
@@ -50,6 +52,11 @@ class Tasks extends Model
     public function isAssigned($id)
     {
         return $this->history->contains('tasks_id', $id);
+    }
+
+    public function isAssignedTo()
+    {
+        return $this->history()->latest()->first('user_id');
     }
 
     public function taskStatus($id)
