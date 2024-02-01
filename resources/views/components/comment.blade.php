@@ -35,7 +35,7 @@
         <label for="comment" class="sr-only">Comment</label>
         <textarea
             name="comments[{{ $task->id }}]"
-            id="comment"
+            id="comment[{{ $task->id }}]"
             cols="30"
             rows="1"
             class="bg-gray-100 border-2 w-full p-4 rounded-lg @error('comments.' . $task->id) border-red-500 @enderror"
@@ -45,14 +45,15 @@
         <span
             id="uploadIcon"
             class="upload-icon"
-            onclick="$('#imageInput').click()"
+            onclick="$('#imageInput{{ $task->id }}').click()"
             >&#x1F4F7;</span
         >
         <!-- Hidden file input for image upload -->
         <input
             type="file"
-            id="imageInput"
-            name="image"
+            id="imageInput{{ $task->id }}"
+            name="images[{{ $task->id }}]"
+            onchange="previewImage(this, {{ $task->id }});"
             accept="image/*"
             style="display: none"
         />
@@ -69,7 +70,56 @@
         </button>
     </div>
 </form>
+<button
+    id="cancel{{ $task->id }}"
+    onclick="cancelImageSelection({{ $task->id }})"
+    style="display: none"
+>
+    X
+</button>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<img
+    src=""
+    alt="Image Preview"
+    id="imagePreview{{ $task->id }}"
+    style="max-width: 100%; display: none"
+    height="100"
+    width="100"
+/>
 
+<script>
+    function previewImage(input, taskId) {
+        const fileInput = input;
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imagePreview = document.getElementById(
+                    "imagePreview" + taskId
+                );
+                const cancelButton = document.getElementById("cancel" + taskId);
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+                cancelButton.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function cancelImageSelection(taskId) {
+        const fileInput = document.getElementById("imageInput" + taskId);
+        const imagePreview = document.getElementById("imagePreview" + taskId);
+        const cancelButton = document.getElementById(
+            "button[onclick='cancelImageSelection(" + taskId + ")']"
+        );
+
+        fileInput.value = null; // Unselect the file
+        imagePreview.src = ""; // Clear the preview
+        imagePreview.style.display = "none"; // Hide the preview
+        cancelButton.style.display = "none"; // Hide the preview
+    }
+</script>
 @endauth

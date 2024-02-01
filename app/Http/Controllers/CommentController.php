@@ -12,14 +12,21 @@ class CommentController extends Controller
     {
         $this->validate($request, [
             "comments.*" => "required",
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'comments.*.required' => 'The field for comment is required.',
         ]);
+        // print_r($request->images);
+        // die;
+        $imageSingle = '';
+        foreach ($request->images as $image) {
+            $imageSingle = $image;
+        }
+        // die;
         foreach ($request->comments as $comment) {
-            if ($request->image) {
-                $imageName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('uploads'), $imageName);
+            if ($request->images) {
+                $imageName = time() . '.' . $imageSingle->extension();
+                $imageSingle->move(public_path('uploads'), $imageName);
                 $attachment = 'uploads/' . $imageName;
             } else {
                 $attachment = null;
