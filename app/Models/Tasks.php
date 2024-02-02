@@ -54,7 +54,7 @@ class Tasks extends Model
         return $this->history()->latest()->first('user_id')->user_id;
     }
 
-    public function taskStatus($id)
+    public function taskStatus()
     {
         return $this->history->contains('status', 'Done');
     }

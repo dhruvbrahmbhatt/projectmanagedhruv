@@ -56,7 +56,7 @@
         @if ($tasks->count()) @auth @if (auth()->user()->post === 'D')
         <h1 class="text-2xl font-bold">My Tasks</h1>
         @foreach ($tasks as $task) @if($task->isAssignedTo() ==
-        auth()->user()->id)
+        auth()->user()->id && !$task->taskStatus())
         <x-task
             :task="$task"
             :developers="$developers"
@@ -64,30 +64,30 @@
         />
         <x-comment :comments="$task->comments" :task="$task" />
         @endif @endforeach Others Tasks : @foreach ($tasks as $task)
-        @if($task->isAssignedTo() != auth()->user()->id)
+        @if($task->isAssignedTo() != auth()->user()->id && !$task->taskStatus())
         <x-task
             :task="$task"
             :developers="$developers"
             :taskhistory="$task_history"
         />
         <x-comment :comments="$task->comments" :task="$task" />
-        @endif @endforeach
-        <!-- {{ NON - DEVELOPERS }} -->
-        @else @foreach ($tasks as $task)
+        @endif @endforeach @else @foreach ($tasks as $task)
+        @if(!$task->taskStatus())
         <x-task
             :task="$task"
             :developers="$developers"
             :taskhistory="$task_history"
         />
         <x-comment :comments="$task->comments" :task="$task" />
-        @endforeach @endif @endauth @guest @foreach ($tasks as $task)
+        @endif @endforeach @endif @endauth @guest @foreach ($tasks as $task)
+        @if(!$task->taskStatus())
         <x-task
             :task="$task"
             :developers="$developers"
             :taskhistory="$task_history"
         />
         <x-comment :comments="$task->comments" :task="$task->task" />
-        @endforeach @endguest @else
+        @endif @endforeach @endguest @else
         <p>No Tasks.</p>
         @endif
         {{-- PAGINATION --}}
