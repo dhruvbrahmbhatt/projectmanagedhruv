@@ -19,8 +19,10 @@ class CommentController extends Controller
         // print_r($request->images);
         // die;
         $imageSingle = '';
-        foreach ($request->images as $image) {
-            $imageSingle = $image;
+        if ($request->images) {
+            foreach ($request->images as $image) {
+                $imageSingle = $image;
+            }
         }
         // die;
         foreach ($request->comments as $comment) {

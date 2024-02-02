@@ -25,13 +25,32 @@
 @endforeach @endif
 {{-- COMMENT FORM --}}
 @auth
+<button
+    id="cancel{{ $task->id }}"
+    onclick="cancelImageSelection({{ $task->id }})"
+    style="display: none"
+    class="cursor-pointer"
+>
+    X
+</button>
+
+<img
+    src=""
+    alt="Image Preview"
+    id="imagePreview{{ $task->id }}"
+    style="max-width: 100%; display: none"
+    height="100"
+    width="100"
+    class="cursor-pointer"
+/>
 <form
     action="{{ route('tasks.comment', $task) }}"
     method="post"
     enctype="multipart/form-data"
 >
     @csrf
-    <div class="mb-4 ml-4">
+    <a href="" class="font-bold text-sm">{{ auth()->user()->name }}</a>
+    <div class="flex mb-4 ml-4">
         <label for="comment" class="sr-only">Comment</label>
         <textarea
             name="comments[{{ $task->id }}]"
@@ -44,7 +63,7 @@
         <!-- Icon to trigger image upload -->
         <span
             id="uploadIcon"
-            class="upload-icon"
+            class="upload-icon cursor-pointer xl"
             onclick="$('#imageInput{{ $task->id }}').click()"
             >&#x1F4F7;</span
         >
@@ -55,6 +74,7 @@
             name="images[{{ $task->id }}]"
             onchange="previewImage(this, {{ $task->id }});"
             accept="image/*"
+            class="cursor-pointer"
             style="display: none"
         />
         @error('comments.' . $task->id)
@@ -70,22 +90,6 @@
         </button>
     </div>
 </form>
-<button
-    id="cancel{{ $task->id }}"
-    onclick="cancelImageSelection({{ $task->id }})"
-    style="display: none"
->
-    X
-</button>
-
-<img
-    src=""
-    alt="Image Preview"
-    id="imagePreview{{ $task->id }}"
-    style="max-width: 100%; display: none"
-    height="100"
-    width="100"
-/>
 
 <script>
     function previewImage(input, taskId) {

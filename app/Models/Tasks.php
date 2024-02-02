@@ -39,11 +39,6 @@ class Tasks extends Model
         return $this->belongsTo(User::class, 'developer_id');
     }
 
-    public function allDevelopers()
-    {
-        return User::where(['post' => 'D'])->get();
-    }
-
     public function history()
     {
         return $this->hasMany(TaskHistory::class);
@@ -56,7 +51,7 @@ class Tasks extends Model
 
     public function isAssignedTo()
     {
-        return $this->history()->latest()->first('user_id');
+        return $this->history()->latest()->first('user_id')->user_id;
     }
 
     public function taskStatus($id)

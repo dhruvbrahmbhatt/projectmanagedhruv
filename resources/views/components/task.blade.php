@@ -37,25 +37,21 @@ $taskhistory])
         @endcan
     </div>
     <p class="mb-2 ml-2 text-lg">{{ $task->task }}</p>
-    <div class="flex">
-        @php $btnAssignText = '' @endphp @if (!empty($task->history))
-        <p class="mb-2 ml-2 text-sm">
-            @foreach ($task->history as $history)
-            {{ $history->status }} :
-            {{ $history->user ? $history->user->name : "Created" }} :
-            {{ $history->created_at->format('d/m/y g:i A') }}<br />
-            @if($history->status === "Unassigned") @php $btnAssignText =
-            'Assign' @endphp @else @php $btnAssignText = 'Transfer' @endphp
-            @endif @endforeach
-        </p>
-        @auth @can('editTask', $task)
-        <span class="float-right">
-            <x-assign-to-popup
-                :developers="$developers"
-                :task="$task"
-                :btn="$btnAssignText"
-            />
-            @endcan @endauth @endif
-        </span>
-    </div>
+    @php $btnAssignText = '' @endphp @if (!empty($task->history))
+    <p class="mb-2 ml-2 text-sm">
+        @foreach ($task->history as $history)
+        {{ $history->status }} :
+        {{ $history->user ? $history->user->name : "Created" }} :
+        {{ $history->created_at->format('d/m/y g:i A') }}<br />
+        @if($history->status === "Unassigned") @php $btnAssignText = 'Assign'
+        @endphp @else @php $btnAssignText = 'Transfer' @endphp @endif
+        @endforeach
+    </p>
+    @auth @can('editTask', $task)
+    <x-assign-to-popup
+        :developers="$developers"
+        :task="$task"
+        :btn="$btnAssignText"
+    />
+    @endcan @endauth @endif
 </div>

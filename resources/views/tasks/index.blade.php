@@ -55,7 +55,7 @@
 
         @if ($tasks->count()) @auth @if (auth()->user()->post === 'D')
         <h1 class="text-2xl font-bold">My Tasks</h1>
-        @foreach ($tasks as $task) @if($task->isAssignedTo()->user_id ==
+        @foreach ($tasks as $task) @if($task->isAssignedTo() ==
         auth()->user()->id)
         <x-task
             :task="$task"
@@ -64,14 +64,16 @@
         />
         <x-comment :comments="$task->comments" :task="$task" />
         @endif @endforeach Others Tasks : @foreach ($tasks as $task)
-        @if($task->isAssignedTo()->user_id != auth()->user()->id)
+        @if($task->isAssignedTo() != auth()->user()->id)
         <x-task
             :task="$task"
             :developers="$developers"
             :taskhistory="$task_history"
         />
         <x-comment :comments="$task->comments" :task="$task" />
-        @endif @endforeach @else @foreach ($tasks as $task)
+        @endif @endforeach
+        <!-- {{ NON - DEVELOPERS }} -->
+        @else @foreach ($tasks as $task)
         <x-task
             :task="$task"
             :developers="$developers"

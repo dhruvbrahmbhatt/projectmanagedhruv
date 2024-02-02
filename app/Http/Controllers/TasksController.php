@@ -15,7 +15,7 @@ class TasksController extends Controller
     }
     public function index()
     {
-        $developers = Tasks::allDevelopers();
+        $developers = User::where('post', '=', 'D')->get();
         $tasks = Tasks::tasks();
         $taskHistory = TaskHistory::whereIn('status', ['Assigned', 'Transfered'])
             ->latest()
