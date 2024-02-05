@@ -45,6 +45,7 @@
                         >
                     </button>
                     <!-- Dropdown menu -->
+                    @if(auth()->user()->unreadNotifications->count())
                     <ul
                         id="dropdown"
                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 p-1"
@@ -74,6 +75,15 @@
                         >
                         @endforeach
                     </ul>
+                    @else
+                    <ul
+                        id="dropdown"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 p-1"
+                        aria-labelledby="dropdownDefaultButton"
+                    >
+                        No Notification
+                    </ul>
+                    @endif
                 </li>
                 <li class="p-3">
                     <a href="">{{ auth()->user()->name }}</a>

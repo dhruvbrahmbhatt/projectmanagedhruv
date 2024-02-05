@@ -50,3 +50,4 @@ Route::delete('/tasks/{comment}/comment', [CommentController::class, 'destroy'])
 
 Route::post('/task-assigned', [App\Http\Controllers\TaskAssignedController::class, 'taskAssigned'])->name('taskAssigned');
 Route::get('/mark-as-read', [App\Http\Controllers\TasksController::class, 'markAsRead'])->name('markAsRead');
+Route::post('/meeting-called', [App\Http\Controllers\TaskAssignedController::class, 'meetingCalled'])->name('meetingCalled');
