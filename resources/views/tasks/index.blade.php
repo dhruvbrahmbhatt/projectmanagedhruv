@@ -56,7 +56,7 @@
         @if ($tasks->count()) @auth @if (auth()->user()->post === 'D')
         <h1 class="text-2xl font-bold">My Tasks</h1>
         @foreach ($tasks as $task) @if($task->isAssignedTo() ==
-        auth()->user()->id && !$task->taskStatus())
+        auth()->user()->id && !$task->done())
         <x-task
             :task="$task"
             :developers="$developers"
@@ -64,15 +64,14 @@
         />
         <x-comment :comments="$task->comments" :task="$task" />
         @endif @endforeach Others Tasks : @foreach ($tasks as $task)
-        @if($task->isAssignedTo() != auth()->user()->id && !$task->taskStatus())
+        @if($task->isAssignedTo() != auth()->user()->id && !$task->done())
         <x-task
             :task="$task"
             :developers="$developers"
             :taskhistory="$task_history"
         />
         <x-comment :comments="$task->comments" :task="$task" />
-        @endif @endforeach @else @foreach ($tasks as $task)
-        @if(!$task->taskStatus())
+        @endif @endforeach @else @foreach ($tasks as $task) @if(!$task->done())
         <x-task
             :task="$task"
             :developers="$developers"
@@ -80,7 +79,7 @@
         />
         <x-comment :comments="$task->comments" :task="$task" />
         @endif @endforeach @endif @endauth @guest @foreach ($tasks as $task)
-        @if(!$task->taskStatus())
+        @if(!$task->done())
         <x-task
             :task="$task"
             :developers="$developers"
@@ -94,4 +93,5 @@
         {{ $tasks->links() }}
     </div>
 </div>
+<x-call-meeting :developers="$developers" />
 @endsection

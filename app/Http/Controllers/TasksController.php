@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TaskAssigned;
 use App\Models\TaskHistory;
 use App\Models\User;
 use App\Models\Tasks;
+use App\Notifications\TaskAssigned as NotificationsTaskAssigned;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
 {
@@ -51,7 +54,20 @@ class TasksController extends Controller
             'status' => $status,
         ]);
 
+        if ($user_id) {
+            TaskAssigned::create([
+                'user_id' => $user_id,
+                'tasks_id'  => $task_id
+            ]);
+            User::find($user_id)->notify(new NotificationsTaskAssigned(Tasks::latest()->first()->task));
+        }
         return back();
+    }
+
+    public function markAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        return redirect()->back();
     }
 
     public function edit(Tasks $tasks)

@@ -55,7 +55,7 @@
         <textarea
             name="comments[{{ $task->id }}]"
             id="comment[{{ $task->id }}]"
-            cols="30"
+            cols="10"
             rows="1"
             class="bg-gray-100 border-2 w-full p-4 rounded-lg @error('comments.' . $task->id) border-red-500 @enderror"
             placeholder="status on task"

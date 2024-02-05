@@ -47,3 +47,6 @@ Route::delete('/tasks/{tasks}/task', [TasksController::class, 'destroy'])->name(
 
 Route::post('/tasks/{tasks}/comment', [CommentController::class, 'store'])->name('tasks.comment');
 Route::delete('/tasks/{comment}/comment', [CommentController::class, 'destroy'])->name('comment.delete');
+
+Route::post('/task-assigned', [App\Http\Controllers\TaskAssignedController::class, 'taskAssigned'])->name('taskAssigned');
+Route::get('/mark-as-read', [App\Http\Controllers\TasksController::class, 'markAsRead'])->name('markAsRead');
