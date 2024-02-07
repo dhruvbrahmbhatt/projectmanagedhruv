@@ -1,6 +1,6 @@
 @extends('layouts.app') @section('content')
 <div class="flex justify-center">
-    <div class="w-8/12 bg-white p-6 mb-4 rounded-lg">
+    <div class="w-full md:w-8/12 lg:w-8/12 bg-white p-6 mb-4 rounded-lg">
         @auth @if (auth()->user()->post != 'D')
         {{-- TASK FORM --}}
         <form action="{{ route('tasks') }}" method="post">
@@ -93,5 +93,6 @@
         {{ $tasks->links() }}
     </div>
 </div>
+@auth @if(auth()->user()->post !== 'D')
 <x-call-meeting :developers="$developers" />
-@endsection
+@endif @endauth @endsection

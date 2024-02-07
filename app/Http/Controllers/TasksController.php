@@ -19,13 +19,13 @@ class TasksController extends Controller
     public function index()
     {
         $developers = User::where('post', '=', 'D')->get();
-        $tasks = Tasks::tasks();
+        $tasks = new Tasks();
         $taskHistory = TaskHistory::whereIn('status', ['Assigned', 'Transfered'])
             ->latest()
             ->get()
             ->unique('tasks_id');
         return view('tasks.index', [
-            'tasks' => $tasks,
+            'tasks' => $tasks->tasks(),
             'developers' => $developers,
             'task_history' => $taskHistory,
         ]);

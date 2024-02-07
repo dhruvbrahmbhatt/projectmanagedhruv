@@ -49,7 +49,6 @@
     enctype="multipart/form-data"
 >
     @csrf
-    <a href="" class="font-bold text-sm">{{ auth()->user()->name }}</a>
     <div class="flex mb-4 ml-4">
         <label for="comment" class="sr-only">Comment</label>
         <textarea
